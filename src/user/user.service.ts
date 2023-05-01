@@ -1,57 +1,31 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SupabaseClient, createClient } from '@supabase/supabase-js';
 import { ConfigService } from '@nestjs/config/dist';
+import { SupabaseService } from 'src/supabase/supabaseService';
 
 @Injectable()
 export class UserService {
-  private supabase: SupabaseClient;
-
-  public get supabaseClient() {
-    return this.supabase;
-  }
-
+  
   constructor(
     @InjectRepository(User)
     private readonly users: Repository<User>,
+    private supabase: SupabaseService,
     private config: ConfigService
-  ){
-    this.initializeSupabase();
-  }
-  
-  initializeSupabase() {
-    const { key, url } = this.config.get<{ key: string; url: string }>('supabase');
-    this.supabase = createClient(url, key);
-}
-async createUser(email: string, password: string){
+  ){}
+
+async createUser(email:string, password:string){
         
-  const { data, error } = await this.supabase.auth.signUp({
-      email,
-      password,
-  });
+  const { data, error } = await this.supabase.client.auth.signUp({
+    email,
+    password
+  })
   if (error) {
-  throw new Error(error.message);
-}
-  return data.user
-}
-
-  findAll() {
-    return this.users.find()
+    throw new Error(error.message);
   }
-
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+    return data.user
   }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
-  }
+ 
 }

@@ -4,14 +4,14 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import config from './config';
-
+import dbConfig from './config/db.config';
+import supabaseConfig from './config/supabase.config';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature(),
     ConfigModule.forRoot({
-      load: [config]
+      load: [dbConfig, supabaseConfig]
     }),
     UserModule
   ],

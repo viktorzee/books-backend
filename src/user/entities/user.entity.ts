@@ -1,23 +1,19 @@
 import { IsNotEmpty } from "class-validator";
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { CreateDateColumn,Column, Entity, PrimaryColumn, Unique, UpdateDateColumn } from "typeorm";
 
 @Entity()
 @Unique(['username', 'email'])
 export class User {
-    @PrimaryGeneratedColumn()
-    id: string
-
-    @Column()
-    @IsNotEmpty()
-    email: string
+    @PrimaryColumn()
+    id: string    
 
     @Column()
     @IsNotEmpty()
     username: string
 
-    @Column()
+    @CreateDateColumn()
     createdAt: Date
 
-    @Column()
+    @UpdateDateColumn()
     updatedAt: Date
 }
