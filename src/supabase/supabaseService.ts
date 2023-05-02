@@ -21,7 +21,7 @@ import {
     }
   
     private initializeSupabase() {
-      const { key, url } = this.config.get<Record<string, string>>('supabase');
+      const { key, url } = this.config.get('supabase');
       this.client = createClient(url, key);
     }
   

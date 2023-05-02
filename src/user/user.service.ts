@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { SupabaseClient, createClient } from '@supabase/supabase-js';
 import { ConfigService } from '@nestjs/config/dist';
 import { SupabaseService } from 'src/supabase/supabaseService';
-import { IsEmail } from 'class-validator';
+import { isEmail } from 'class-validator';
 
 @Injectable()
 export class UserService {
@@ -19,7 +19,7 @@ export class UserService {
 
   async createUser(data){      
     // Validate email
-    if (!IsEmail(data.email)) {
+    if (!isEmail(data.email)) {
       throw new Error('Invalid email');
     }    
     const { id } = await this.supabase.createUser(data);

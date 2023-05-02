@@ -2,12 +2,12 @@ import { IsNotEmpty } from "class-validator";
 import { CreateDateColumn,Column, Entity, PrimaryColumn, Unique, UpdateDateColumn } from "typeorm";
 
 @Entity()
-@Unique(['username', 'email'])
+@Unique(['username'])
 export class User {
     @PrimaryColumn()
     id: string    
 
-    @Column()
+    @Column({nullable: true})
     @IsNotEmpty()
     username: string
 
