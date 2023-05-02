@@ -7,8 +7,7 @@ export class UserController {
 
   @Post('create')
   create(@Body() data) {
-    const {email, password} = data
-    return this.userService.createUser(email, password);
+    return this.userService.createUser(data);
   }
  
 }
