@@ -27,4 +27,8 @@ export class UserService {
     return user;
   
   }
+
+  async getUser(user){
+    
+  }
 }

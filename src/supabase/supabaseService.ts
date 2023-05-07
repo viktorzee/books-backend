@@ -40,9 +40,7 @@ import {
         return { id };
       } catch (error) {
         this.logger.error(error);
-        throw new BadRequestException(
-          'Something went wrong and we could not create your account. Please try again.',
-        );
+        throw new BadRequestException(error.message ||  'Something went wrong and we could not create your account. Please try again.',);
       }
     }
   
