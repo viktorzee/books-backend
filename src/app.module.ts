@@ -7,34 +7,38 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import dbConfig from './config/db.config';
 import supabaseConfig from './config/supabase.config';
 import { AuthMiddleware } from './auth/auth.middleware';
+import { JwtService } from '@nestjs/jwt';
+import { SupabaseService } from './supabase/supabaseService';
+import { BookModule } from './book/book.module';
 
 @Module({
   imports: [ 
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => {
+        return {
+            ...configService.get('database'),
+            entities: [],
+            autoLoadEntities: true,
+            synchronize: true,
+         }
+        },
+      inject: [ConfigService],
+    }),    
     ConfigModule.forRoot({
       isGlobal:true,
       envFilePath: ['.env.local', '.env'],
       load: [dbConfig, supabaseConfig]
     }),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => {
-        const database = configService.get('database')
-        console.log(database)
-        return {
-          ...configService.get('database'),
-          autoLoadEntities: true,
-          synchronize: true,
-        }
-      },
-      inject: [ConfigService],
-    }),
-    UserModule
+    UserModule,
+    BookModule,
   ],
   controllers: [AppController],
-  providers: [AppService, ConfigService],
+  providers: [AppService, JwtService, SupabaseService],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer){
+export class AppModule{
+   configure(consumer: MiddlewareConsumer){
     consumer.apply(AuthMiddleware).forRoutes('*')
   }
+
 }

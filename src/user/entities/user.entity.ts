@@ -1,10 +1,10 @@
 import { IsNotEmpty } from "class-validator";
-import { CreateDateColumn,Column, Entity, PrimaryColumn, Unique, UpdateDateColumn } from "typeorm";
+import { CreateDateColumn,Column, Entity, PrimaryColumn, Unique, UpdateDateColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 @Unique(['username'])
 export class User {
-    @PrimaryColumn()
+    @PrimaryColumn('uuid')
     id: string    
 
     @Column({nullable: true})

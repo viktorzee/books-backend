@@ -21,9 +21,14 @@ export class UserService {
     // Validate email
     if (!isEmail(data.email)) {
       throw new Error('Invalid email');
-    }    
+    }
+
+    const { username } = data
+
     const { id } = await this.supabase.createUser(data);
-    const user = await this.users.save({ id });
+    console.log(id, "ids");
+    const user = await this.users.save({ id: id, username });
+    console.log(user)
     return user;
   
   }

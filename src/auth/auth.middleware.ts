@@ -1,4 +1,4 @@
-import { Injectable, NestMiddleware, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, NestMiddleware, HttpException, HttpStatus, UnauthorizedException } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { SupabaseService } from '../supabase/supabaseService';
@@ -28,6 +28,8 @@ export class AuthMiddleware implements NestMiddleware {
                     throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED)
 
                 }            
+            }else{
+                next();
             }
         }catch {
          throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED)
