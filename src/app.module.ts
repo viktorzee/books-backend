@@ -10,6 +10,7 @@ import { AuthMiddleware } from './auth/auth.middleware';
 import { JwtService } from '@nestjs/jwt';
 import { SupabaseService } from './supabase/supabaseService';
 import { BookModule } from './book/book.module';
+import { ShelfModule } from './shelf/shelf.module';
 
 @Module({
   imports: [ 
@@ -32,6 +33,7 @@ import { BookModule } from './book/book.module';
     }),
     UserModule,
     BookModule,
+    ShelfModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService, SupabaseService],
