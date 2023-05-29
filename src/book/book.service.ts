@@ -3,12 +3,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Book } from './entities/book.entity';
 import { Repository } from 'typeorm';
 import validateObjectHelper from 'src/validator/validatorOjectHelper';
+import { Shelf } from 'src/shelf/entities/shelf.entity';
 
 @Injectable()
 export class BookService {
   constructor(
     @InjectRepository(Book)
-    private books: Repository<Book>
+    private books: Repository<Book>,
+
+    @InjectRepository(Shelf)
+    private shelf: Repository<Shelf>
   ){}
   async store(book: Partial<Book>) : Promise<Book>{
     const toValidate = this.books.create(book);
@@ -42,6 +46,15 @@ export class BookService {
   }
 
   async remove(id: string) {
-    return await this.books.delete(id)
+    const book = await this.books.findOne({where: {id}});
+
+    await this.shelf
+      .createQueryBuilder()
+      .delete()
+      .from('shelf_books')
+      .where('bookId = :bookId', { bookId: book.id })
+      .execute();
+
+    await this.books.remove(book);
   }
 }
