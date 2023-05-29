@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Shelf } from "src/shelf/entities/shelf.entity";
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Book {
@@ -17,8 +18,8 @@ export class Book {
     @Column()
     coverImageUrl: string;
 
-    @Column()
-    shelfId: string;
+    @ManyToMany(() => Shelf, (shelf) => shelf.books)
+    shelves: Shelf;
 
     @Column({default: 0, nullable: true})
     ratings:number;
