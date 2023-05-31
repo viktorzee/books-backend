@@ -11,6 +11,7 @@ import { JwtService } from '@nestjs/jwt';
 import { SupabaseService } from './supabase/supabaseService';
 import { BookModule } from './book/book.module';
 import { ShelfModule } from './shelf/shelf.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [ 
@@ -34,6 +35,7 @@ import { ShelfModule } from './shelf/shelf.module';
     UserModule,
     BookModule,
     ShelfModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService, SupabaseService],

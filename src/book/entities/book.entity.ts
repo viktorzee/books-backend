@@ -1,5 +1,7 @@
+import { Category } from "src/category/entities/category.entity";
 import { Shelf } from "src/shelf/entities/shelf.entity";
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "src/user/entities/user.entity";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Book {
@@ -18,6 +20,20 @@ export class Book {
     @Column()
     coverImageUrl: string;
 
+    @ManyToMany(() => Category, (category) => category.book, {eager: true})
+        @JoinTable({
+            name: 'book_category',
+            joinColumn: {
+            name: 'bookId',
+            referencedColumnName: 'id'
+        },
+        inverseJoinColumn: {
+            name: 'categoryId',
+            referencedColumnName: 'id'
+        }
+    })
+    category: Category[];
+
     @ManyToMany(() => Shelf, (shelf) => shelf.books)
     shelves: Shelf;
 
@@ -32,4 +48,7 @@ export class Book {
 
     @Column('simple-array', {nullable: true})
     tags: string[];
+
+    @ManyToOne(() => User, (user) => user.id)
+    user: User;
 }

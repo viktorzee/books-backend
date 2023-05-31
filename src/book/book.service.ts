@@ -4,6 +4,7 @@ import { Book } from './entities/book.entity';
 import { Repository } from 'typeorm';
 import validateObjectHelper from 'src/validator/validatorOjectHelper';
 import { Shelf } from 'src/shelf/entities/shelf.entity';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class BookService {
@@ -22,8 +23,13 @@ export class BookService {
     return newBook;
   }
 
-  async index() {
-    return await this.books.find();
+  async index(user: User) {
+    return this.books.find({
+      where: {
+        user
+      },
+      relations: ['userId']
+    });
   }
 
   async show(id: string) {
