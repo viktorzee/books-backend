@@ -1,5 +1,6 @@
 import { Book } from "src/book/entities/book.entity";
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "src/user/entities/user.entity";
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Shelf {
@@ -25,4 +26,7 @@ export class Shelf {
     }
   })
   books: Book[];
+
+  @ManyToOne(() => User, (user) => user.id)
+  user: User;
 }

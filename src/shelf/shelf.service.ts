@@ -4,6 +4,7 @@ import { Shelf } from './entities/shelf.entity';
 import { Repository } from 'typeorm';
 import validateObjectHelper from 'src/validator/validatorOjectHelper';
 import { Book } from 'src/book/entities/book.entity';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class ShelfService {
@@ -20,8 +21,14 @@ export class ShelfService {
     return newShelf;
   }
 
-  async index() {
-    return await this.shelf.find();
+  async index(user: User) {
+    // return await this.shelf.find();
+    return this.shelf.find({
+      where: {
+        user
+      },
+      relations: ['user']
+    });
   }
 
   async show(id: string) {
@@ -50,7 +57,6 @@ export class ShelfService {
 
   async update(id: string, data) {
     const foundShelf = await this.shelf.findOne({where: {id}});
-    console.log(foundShelf)
     if (!foundShelf) {
       throw new NotFoundException('Shelf not found');
     }

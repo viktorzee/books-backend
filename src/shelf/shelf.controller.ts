@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, Request, UseGuards } from '@nestjs/common';
 import { ShelfService } from './shelf.service';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '../auth/auth.guard';
 
 @ApiTags('/api/shelf/') // Tags for the controller
 @Controller('/api/shelf/')
+@UseGuards(AuthGuard)
 export class ShelfController {
   constructor(
     private readonly shelfService: ShelfService
@@ -11,14 +13,16 @@ export class ShelfController {
 
   @Post('create')
   @ApiResponse({ status: 200, description: 'Store a newly created shelf in storage' }) // Response description
-  create(@Body() data) {
-    return this.shelfService.create(data);
+  create(@Body() data, @Request() req) {
+    const userId = req.user;   
+    return this.shelfService.create({...data, user: userId});
   }
 
   @Get()
   @ApiResponse({ status: 200, description: 'Get listing of all shelves' }) // Response description
-  index() {
-    return this.shelfService.index();
+  index(@Request() req) {
+    const user = req.user;
+    return this.shelfService.index(user);
   }
 
   @Get(':id')
