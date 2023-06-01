@@ -13,6 +13,7 @@ import { BookModule } from './book/book.module';
 import { ShelfModule } from './shelf/shelf.module';
 import { CategoryModule } from './category/category.module';
 import secretConfig from './config/secret.config';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [ 
@@ -43,6 +44,7 @@ import secretConfig from './config/secret.config';
       },
       inject: [ConfigService]
     }),
+    AuthModule,
     UserModule,
     BookModule,
     ShelfModule,
