@@ -2,6 +2,8 @@ import { Injectable, NestMiddleware, HttpException, HttpStatus, UnauthorizedExce
 import { Request, Response, NextFunction } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { SupabaseService } from '../supabase/supabaseService';
+import { decode } from 'jsonwebtoken';
+import secretConfig from 'src/config/secret.config';
 
 interface UserRequest extends Request {
     user: any
@@ -14,25 +16,30 @@ export class AuthMiddleware implements NestMiddleware {
         try{
 
             if (
-                req.headers.authorization &&
-                req.headers.authorization.startsWith('Bearer')
+                req.headers.authorization
+                // req.headers.authorization &&
+                // req.headers.authorization.startsWith('Bearer')
             ) {
-                const token = req.headers.authorization.split(' ')[1];
-                const decoded = await this.jwt.verify(token);
-                const user = await this.supabaseService.getUserUsingToken(decoded)
-                console.log(user)
+                const token = req.headers.authorization.split(' ')[1];                
+                if(!token){
+                    throw new HttpException('Authentication failed', HttpStatus.UNAUTHORIZED)
+                }
+                
+                const decoded = this.jwt.verify(token, {secret: process.env.JWT_SECRET_KEY});
+                const user = await this.supabaseService.getUserUsingToken(decoded.sub)
+
                 if (user) {
                     req.user = user
                     next()
                 } else {
-                    throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED)
+                    throw new HttpException('Unathourized. Please log in', HttpStatus.UNAUTHORIZED)
 
                 }            
             }else{
                 next();
             }
         }catch {
-         throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED)
+         throw new HttpException('Unathourized. Please log in', HttpStatus.UNAUTHORIZED)
        }
     }
 }
