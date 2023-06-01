@@ -28,7 +28,7 @@ export class BookService {
       where: {
         user
       },
-      relations: ['userId']
+      relations: ['user']
     });
   }
 

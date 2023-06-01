@@ -1,22 +1,27 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards } from '@nestjs/common';
 import { BookService } from './book.service';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @ApiTags('/api/book/') // Tags for the controller
 @Controller('/api/book/')
+@UseGuards(AuthGuard)
 export class BookController {
   constructor(private readonly bookService: BookService) {}
 
   @Post('create')
   @ApiResponse({ status: 200, description: 'Store a newly created book in storage' }) // Response description
-  store(@Body() data) {
-    return this.bookService.store(data);
+  store(@Body() data, @Req() req) {
+    const userId = req.user;   
+    return this.bookService.store({...data, user: userId});
   }
 
   @Get()
   @ApiResponse({ status: 200, description: 'Get listing of all books' }) // Response description
-  index() {
-    return this.bookService.index();
+  index(@Req() req) {
+    
+    const userId = req.user.id
+    return this.bookService.index(userId);
   }
 
   @Get(':id')
