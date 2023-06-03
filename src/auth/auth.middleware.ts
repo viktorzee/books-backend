@@ -16,9 +16,8 @@ export class AuthMiddleware implements NestMiddleware {
         try{
 
             if (
-                req.headers.authorization
-                // req.headers.authorization &&
-                // req.headers.authorization.startsWith('Bearer')
+                req.headers.authorization &&
+                req.headers.authorization.startsWith('Bearer')
             ) {
                 const token = req.headers.authorization.split(' ')[1];                
                 if(!token){
@@ -27,6 +26,11 @@ export class AuthMiddleware implements NestMiddleware {
                 
                 const decoded = this.jwt.verify(token, {secret: process.env.JWT_SECRET_KEY});
                 const user = await this.supabaseService.getUserUsingToken(decoded.sub)
+                const tokenExpired = new Date().getTime() >= decoded.exp * 1000; // Convert expiration time to milliseconds
+
+                if(tokenExpired){
+                    res.send(401).json({message: 'Token expired'})
+                }
 
                 if (user) {
                     req.user = user

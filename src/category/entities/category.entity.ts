@@ -16,10 +16,7 @@ export class Category {
 
   @Column()
   @IsNotEmpty()
-  name: string;
-
-  @ManyToMany(() => Book, (book) => book.category)
-  book: Book;
+  name: string;  
 
   @Column({
     type: 'timestamp',

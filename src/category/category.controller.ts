@@ -7,7 +7,7 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
-  @Get()
+  @Get('lists')
   @ApiResponse({ status: 200, description: 'Get listing of all categories' }) // Response description
   index() {
     return this.categoryService.findAll();

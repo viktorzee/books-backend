@@ -16,41 +16,30 @@ export class UserService {
     private config: ConfigService
   ){}
 
-  // async createUser(data){      
-  //   // Validate email
-  //   if (!isEmail(data.email)) {
-  //     throw new Error('Invalid email');
-  //   }
-    
-  //   const { username } = data
-  //   const { id } = await this.supabase.createUser(data);
-  //   const user = await this.users.save({ id: id, username });
-  //   return user;
-  
-  // }
-  
-  // async login(data){
-  //   const accessToken = await this.supabase.login(data);
-  //   return accessToken;
-  // }
+  async createUser(data){      
+    // Validate email
+    if (!isEmail(data.email)) {
+      throw new Error('Invalid email');
+    }
 
-  async index(user: User){
-    return await this.users.find();
+    const { username } = data
+
+    const { id } = await this.supabase.createUser(data);
+    const user = await this.users.save({ id: id, username });
+    return user;
+  
+  }
+  
+  async login(data){
+    const accessToken = await this.supabase.login(data);
+    return accessToken;
   }
 
-  async show(id: string){
-    return await this.users.findOne({where: {id}});
-  }
-
-  async update(id: string, data){
+  async show(id: string) {
     const foundUser = await this.users.findOne({where: {id}});
-
-    if(!foundUser) throw new NotFoundException("User Not Found");
-    const update = await this.users.update(id, data);
-    return update;
-  }
-
-  async remove(id: string){
-    return await this.users.delete(id)
+    if (!foundUser) {
+      throw new NotFoundException('User not found');
+    }
+    return foundUser;
   }
 }
