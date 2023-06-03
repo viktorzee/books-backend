@@ -40,7 +40,8 @@ export class BookService {
     return foundBook;
   }
 
-  async update(id: string, data: Partial<Book>) {
+  async update(id: string, data: Partial<Book>) {   
+    console.log(id) 
     const foundBook = await this.books.findOne({where: {id}});
     if (!foundBook) {
       throw new NotFoundException('Book not found');

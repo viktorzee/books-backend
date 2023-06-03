@@ -32,23 +32,26 @@ export class ShelfService {
   }
 
   async show(id: string) {
-    const foundShelf = await this.shelf.findOne({where: {id}});
+    const foundShelf = await this.shelf.findOneBy({id});
+    console.log(foundShelf)
     if (!foundShelf) {
       throw new NotFoundException('Shelf not found');
     }
     return foundShelf;
   }
 
-  async addBookToShelf(shelfId: string, bookId: string){
+  async addBookToShelf(data){
+    console.log(data, "data")
+    const {bookId, shelfId} = data
     //get shelf
-    const shelf = await this.shelf.findOne({where: {id: shelfId}, relations: ['books']})
+    const shelf = await this.shelf.findOne({where: {id: shelfId}})
     //get book
     const book = await this.book.findOne({where: {id: bookId}})
-
+    
     //check if book exist in shelf already
-    const existingBook = shelf.books.find((b) => b.id === book.id);
+    let existingBook = shelf.books.find(book => book.id === bookId)
     if(existingBook){
-      throw new ConflictException(`This book ${book.title} already exist in this shelf`);
+      throw new ConflictException(`This book "${book.title}" already exist in this shelf`);
     }
     //else push book to the bookshelf
     shelf.books.push(book)

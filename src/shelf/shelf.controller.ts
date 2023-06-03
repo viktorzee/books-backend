@@ -18,7 +18,7 @@ export class ShelfController {
     return this.shelfService.create({...data, user: userId});
   }
 
-  @Get()
+  @Get('lists')
   @ApiResponse({ status: 200, description: 'Get listing of all shelves' }) // Response description
   index(@Request() req) {
     const user = req.user;
@@ -36,10 +36,10 @@ export class ShelfController {
   update(@Param('id') id: string, @Body() data) {
     return this.shelfService.update(id, data);
   }
-  @Post(':id/add-book')
+  @Post('/add-book')
   @ApiResponse({ status: 200, description: 'Add a specified book to a shelf' }) // Response description
-  async addBook(@Param('id') shelfId: string, @Body('bookId') bookId: string) {
-    return await this.shelfService.addBookToShelf(shelfId, bookId);
+  async addBook(@Body() data) {
+    return await this.shelfService.addBookToShelf(data);
   }
 
   @Post(':id/remove-book')

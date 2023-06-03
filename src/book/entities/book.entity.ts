@@ -1,7 +1,7 @@
 import { Category } from "src/category/entities/category.entity";
 import { Shelf } from "src/shelf/entities/shelf.entity";
 import { User } from "src/user/entities/user.entity";
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Book {
@@ -15,24 +15,18 @@ export class Book {
     description: string;
 
     @Column()
-    published_date: string;
+    page_number: number;
+
+    @Column({
+        type: 'date' ,
+    })
+    published_date: Date;
 
     @Column()
     coverImageUrl: string;
 
-    @ManyToMany(() => Category, (category) => category.book, {eager: true})
-        @JoinTable({
-            name: 'book_category',
-            joinColumn: {
-            name: 'bookId',
-            referencedColumnName: 'id'
-        },
-        inverseJoinColumn: {
-            name: 'categoryId',
-            referencedColumnName: 'id'
-        }
-    })
-    category: Category[];
+    @ManyToOne(() => Category, (category) => category.id, {cascade: true})
+    category: Category;
 
     @ManyToMany(() => Shelf, (shelf) => shelf.books)
     shelves: Shelf;
@@ -49,6 +43,17 @@ export class Book {
     @Column('simple-array', {nullable: true})
     tags: string[];
 
-    @ManyToOne(() => User, (user) => user.id)
+    @ManyToOne(() => User, (user) => user.id,)
     user: User;
+
+    @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    })
+    createdAt: string;
+    @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    })
+    updatedAt: string;
 }
