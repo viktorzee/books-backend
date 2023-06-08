@@ -1,40 +1,14 @@
-# flyctl launch added from .gitignore
-# compiled output
-dist
+# Ignore common development and build artifacts
 node_modules
-
-# Logs
-**\logs
-**\*.log
-**\npm-debug.log*
-**\pnpm-debug.log*
-**\yarn-debug.log*
-**\yarn-error.log*
-**\lerna-debug.log*
-
-# OS
-**\.DS_Store
-
-# Tests
+build
+dist
 coverage
-.nyc_output
+.env.*
 
-# IDEs and editors
-.idea
-**\.project
-**\.classpath
-**\.c9
-**\*.launch
-**\.settings
-**\*.sublime-workspace
+# Exclude specific files
+README.md
+LICENSE
 
-# IDE - VSCode
-**\.vscode\*
-!**\.vscode\settings.json
-!**\.vscode\tasks.json
-!**\.vscode\launch.json
-!**\.vscode\extensions.json
-
-# Ignore .env.local file
-**\.env.*
-fly.toml
+# Exclude sensitive or private files
+secrets.txt
+credentials.json
