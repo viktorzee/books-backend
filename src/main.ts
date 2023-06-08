@@ -6,7 +6,7 @@ import { CategoryService } from './category/category.service';
 import { categoryResource } from './category/entities/seedData';
 
 // Use port number from the PORT environment variable or 3000 if not specified
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -33,6 +33,8 @@ async function bootstrap() {
 
   const categorySeeder = app.get(CategoryService);
   await categorySeeder.create(categoryResource);
+
+  console.log(port, "port")
  
   await app.listen(port);
 }
