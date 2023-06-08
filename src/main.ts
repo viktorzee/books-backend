@@ -34,7 +34,6 @@ async function bootstrap() {
   const categorySeeder = app.get(CategoryService);
   await categorySeeder.create(categoryResource);
 
-  console.log(port, "port")
  
   await app.listen(port);
 }
