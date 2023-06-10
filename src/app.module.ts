@@ -54,10 +54,10 @@ import { AuthModule } from './auth/auth.module';
   providers: [AppService, JwtService, SupabaseService],
 })
 export class AppModule{
-   configure(consumer: MiddlewareConsumer){
-    consumer.apply(AuthMiddleware)
-    .exclude('/api/user/login', '/api/user/register')
-    .forRoutes('*');
-  }
+  //  configure(consumer: MiddlewareConsumer){
+  //   consumer.apply(AuthMiddleware)
+  //   .exclude('/api/user/login', '/api/user/register')
+  //   .forRoutes('*');
+  // }
 
 }

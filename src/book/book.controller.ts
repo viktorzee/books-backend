@@ -5,7 +5,7 @@ import { AuthGuard } from 'src/auth/auth.guard';
 
 @ApiTags('/api/book/') // Tags for the controller
 @Controller('/api/book/')
-@UseGuards(AuthGuard)
+// @UseGuards(AuthGuard)
 export class BookController {
   constructor(private readonly bookService: BookService) {}
 
@@ -13,7 +13,6 @@ export class BookController {
   @ApiResponse({ status: 200, description: 'Store a newly created book in storage' }) // Response description
   store(@Body() data, @Request() req) {
     const userId = req.user;
-    console.log(data, "data") 
     return this.bookService.store({...data, user: userId});
   }
 
@@ -33,7 +32,6 @@ export class BookController {
   @Patch(':id')
   @ApiResponse({ status: 200, description: 'Update specified book in storage' }) // Response description
   update(@Param('id') id: string, @Body() data) {
-    console.log("UPDATE")
     return this.bookService.update(id, data);
   }
 

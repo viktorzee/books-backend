@@ -33,7 +33,6 @@ export class ShelfService {
 
   async show(id: string) {
     const foundShelf = await this.shelf.findOneBy({id});
-    console.log(foundShelf)
     if (!foundShelf) {
       throw new NotFoundException('Shelf not found');
     }
@@ -41,7 +40,6 @@ export class ShelfService {
   }
 
   async addBookToShelf(data){
-    console.log(data, "data")
     const {bookId, shelfId} = data
     //get shelf
     const shelf = await this.shelf.findOne({where: {id: shelfId}})

@@ -5,7 +5,7 @@ import { AuthGuard } from '../auth/auth.guard';
 
 @ApiTags('/api/shelf/') // Tags for the controller
 @Controller('/api/shelf/')
-@UseGuards(AuthGuard)
+// @UseGuards(AuthGuard)
 export class ShelfController {
   constructor(
     private readonly shelfService: ShelfService
