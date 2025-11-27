@@ -9,7 +9,7 @@ import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [UserModule],
-  exports: [UserService],
+  exports: [UserService, SupabaseService],
   controllers: [AuthController],
   providers: [AuthService, UserService, SupabaseService, ConfigService]
 })

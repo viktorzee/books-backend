@@ -14,10 +14,6 @@ export default registerAs<TypeOrmModuleOptions>('database', () => {
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       ssl: sslConfig,
-      extra: {
-        // Force IPv4
-        family: 4,
-      },
     };
   }
 
@@ -27,9 +23,5 @@ export default registerAs<TypeOrmModuleOptions>('database', () => {
     type: 'postgres',
     url: dbUrl,
     ssl: sslConfig,
-    extra: {
-      // Force IPv4
-      family: 4,
-    },
   };
 });
