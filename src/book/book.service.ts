@@ -63,4 +63,25 @@ export class BookService {
 
     await this.books.remove(book);
   }
+
+  async toggleVisibility(id: string, isPublic: boolean, userId: string) {
+    const book = await this.books.findOne({
+      where: { id },
+      relations: ['user'],
+    });
+
+    if (!book) {
+      throw new NotFoundException('Book not found');
+    }
+
+    // Verify ownership
+    if (book.user?.id !== userId) {
+      throw new NotFoundException('Book not found');
+    }
+
+    book.isPublic = isPublic;
+    await this.books.save(book);
+
+    return { id: book.id, isPublic: book.isPublic };
+  }
 }

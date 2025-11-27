@@ -1,19 +1,38 @@
 import { IsNotEmpty } from "class-validator";
-import { CreateDateColumn,Column, Entity, PrimaryColumn, Unique, UpdateDateColumn, PrimaryGeneratedColumn } from "typeorm";
+import {
+  CreateDateColumn,
+  Column,
+  Entity,
+  PrimaryColumn,
+  Unique,
+  UpdateDateColumn,
+} from "typeorm";
 
 @Entity()
-@Unique(['username'])
+@Unique(["username"])
 export class User {
-    @PrimaryColumn('uuid')
-    id: string    
+  @PrimaryColumn("uuid")
+  id: string;
 
-    @Column({nullable: true})
-    @IsNotEmpty()
-    username: string
+  @Column({ nullable: true })
+  @IsNotEmpty()
+  username: string;
 
-    @CreateDateColumn()
-    createdAt: Date
+  @Column({ nullable: true })
+  first_name: string;
 
-    @UpdateDateColumn()
-    updatedAt: Date
+  @Column({ nullable: true })
+  last_name: string;
+
+  @Column({ nullable: true, type: "text" })
+  bio: string;
+
+  @Column({ default: false })
+  isProfilePublic: boolean;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
