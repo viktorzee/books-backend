@@ -1,6 +1,6 @@
 import { Book } from "src/book/entities/book.entity";
 import { User } from "src/user/entities/user.entity";
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Shelf {
@@ -8,9 +8,9 @@ export class Shelf {
     id: string;
 
     @Column()
-    title: string;
+    name: string;
 
-    @Column()
+    @Column({ nullable: true })
     description: string;
 
     @ManyToMany(() => Book, (book) => book.shelves, {eager: true})
@@ -30,14 +30,9 @@ export class Shelf {
   @ManyToOne(() => User, (user) => user.id)
   user: User;
 
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  createdAt: string;
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  updatedAt: string;
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

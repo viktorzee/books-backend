@@ -40,4 +40,15 @@ export class BookController {
   remove(@Param('id') id: string) {
     return this.bookService.remove(id);
   }
+
+  @Patch(':id/visibility')
+  @UseGuards(AuthGuard)
+  @ApiResponse({ status: 200, description: 'Toggle book public visibility' })
+  toggleVisibility(
+    @Param('id') id: string,
+    @Body() data: { isPublic: boolean },
+    @Request() req
+  ) {
+    return this.bookService.toggleVisibility(id, data.isPublic, req.user.id);
+  }
 }

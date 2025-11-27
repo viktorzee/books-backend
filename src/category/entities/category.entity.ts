@@ -3,9 +3,11 @@ import { Book } from 'src/book/entities/book.entity';
 
 import {
   Column,
+  CreateDateColumn,
   Entity,
   ManyToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -16,16 +18,11 @@ export class Category {
 
   @Column()
   @IsNotEmpty()
-  name: string;  
+  name: string;
 
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  createdAt: string;
-  @Column({
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  updatedAt: string;
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

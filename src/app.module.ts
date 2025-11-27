@@ -14,6 +14,8 @@ import { ShelfModule } from './shelf/shelf.module';
 import { CategoryModule } from './category/category.module';
 import secretConfig from './config/secret.config';
 import { AuthModule } from './auth/auth.module';
+import { ReviewModule } from './review/review.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [ 
@@ -49,6 +51,8 @@ import { AuthModule } from './auth/auth.module';
     BookModule,
     ShelfModule,
     CategoryModule,
+    ReviewModule,
+    ProfileModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService, SupabaseService],
