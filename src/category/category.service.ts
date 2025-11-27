@@ -41,6 +41,12 @@ export class CategoryService {
   }
 
   async remove(id: string) {
-    return await this.categories.delete(id);
+    const category = await this.categories.findOne({ where: { id } });
+    if (!category) {
+      throw new NotFoundException('Category not found');
+    }
+    // Soft delete
+    await this.categories.update(id, { isDeleted: true });
+    return await this.categories.softDelete(id);
   }
 }

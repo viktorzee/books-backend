@@ -53,7 +53,7 @@ describe('BookController (e2e)', () => {
   });
 
   beforeEach(async () => {
-    await bookRepository.delete({});
+    await bookRepository.clear();
   });
 
   describe('POST /api/book/create', () => {

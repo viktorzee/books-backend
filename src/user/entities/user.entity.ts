@@ -2,6 +2,7 @@ import { IsNotEmpty } from "class-validator";
 import {
   CreateDateColumn,
   Column,
+  DeleteDateColumn,
   Entity,
   PrimaryColumn,
   Unique,
@@ -35,4 +36,10 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Column({ default: false })
+  isDeleted: boolean;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 }

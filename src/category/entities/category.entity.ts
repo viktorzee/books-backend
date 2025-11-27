@@ -4,6 +4,7 @@ import { Book } from 'src/book/entities/book.entity';
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   ManyToMany,
   PrimaryGeneratedColumn,
@@ -25,4 +26,10 @@ export class Category {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Column({ default: false })
+  isDeleted: boolean;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 }

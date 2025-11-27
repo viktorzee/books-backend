@@ -3,6 +3,7 @@ import { User } from "src/user/entities/user.entity";
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -40,4 +41,10 @@ export class Review {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Column({ default: false })
+  isDeleted: boolean;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 }

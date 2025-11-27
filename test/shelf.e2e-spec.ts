@@ -63,7 +63,7 @@ describe('ShelfController (e2e)', () => {
   });
 
   beforeEach(async () => {
-    await shelfRepository.delete({});
+    await shelfRepository.clear();
   });
 
   describe('POST /api/shelf/create', () => {

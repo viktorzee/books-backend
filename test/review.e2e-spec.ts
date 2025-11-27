@@ -63,7 +63,7 @@ describe('ReviewController (e2e)', () => {
   });
 
   beforeEach(async () => {
-    await reviewRepository.delete({});
+    await reviewRepository.clear();
   });
 
   // Note: POST /api/review/create requires AuthGuard, tested separately with auth

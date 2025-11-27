@@ -1,7 +1,7 @@
 import { Category } from "src/category/entities/category.entity";
 import { Shelf } from "src/shelf/entities/shelf.entity";
 import { User } from "src/user/entities/user.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Book {
@@ -52,4 +52,10 @@ export class Book {
 
     @UpdateDateColumn()
     updatedAt: Date;
+
+    @Column({ default: false })
+    isDeleted: boolean;
+
+    @DeleteDateColumn()
+    deletedAt: Date;
 }

@@ -88,7 +88,9 @@ export class ReviewService {
       throw new ForbiddenException("You can only delete your own reviews");
     }
 
-    await this.reviewRepository.remove(review);
+    // Soft delete
+    await this.reviewRepository.update(id, { isDeleted: true });
+    await this.reviewRepository.softDelete(id);
     return { success: true };
   }
 
