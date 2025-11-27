@@ -5,9 +5,15 @@ import { ProfileController } from "./profile.controller";
 import { User } from "src/user/entities/user.entity";
 import { Book } from "src/book/entities/book.entity";
 import { Review } from "src/review/entities/review.entity";
+import { AuthModule } from "src/auth/auth.module";
+import { JwtModule } from "@nestjs/jwt";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Book, Review])],
+  imports: [
+    TypeOrmModule.forFeature([User, Book, Review]),
+    AuthModule,
+    JwtModule,
+  ],
   controllers: [ProfileController],
   providers: [ProfileService],
   exports: [ProfileService],
