@@ -66,7 +66,13 @@ export class ShelfService {
   }
 
   async remove(id: string) {
-    return await this.shelf.delete(id);
+    const shelf = await this.shelf.findOne({ where: { id } });
+    if (!shelf) {
+      throw new NotFoundException('Shelf not found');
+    }
+    // Soft delete
+    await this.shelf.update(id, { isDeleted: true });
+    return await this.shelf.softDelete(id);
   }
 
   async removeBook(bookId:string, shelfId:string){

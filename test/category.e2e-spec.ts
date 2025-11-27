@@ -40,7 +40,7 @@ describe('CategoryController (e2e)', () => {
   });
 
   beforeEach(async () => {
-    await categoryRepository.delete({});
+    await categoryRepository.clear();
   });
 
   describe('GET /api/category/lists', () => {

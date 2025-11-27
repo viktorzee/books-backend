@@ -53,15 +53,13 @@ export class BookService {
 
   async remove(id: string) {
     const book = await this.books.findOne({where: {id}});
+    if (!book) {
+      throw new NotFoundException('Book not found');
+    }
 
-    await this.shelf
-      .createQueryBuilder()
-      .delete()
-      .from('shelf_books')
-      .where('bookId = :bookId', { bookId: book.id })
-      .execute();
-
-    await this.books.remove(book);
+    // Soft delete - sets deletedAt and isDeleted
+    await this.books.update(id, { isDeleted: true });
+    await this.books.softDelete(id);
   }
 
   async toggleVisibility(id: string, isPublic: boolean, userId: string) {
