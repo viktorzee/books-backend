@@ -61,7 +61,12 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthMiddleware)
-      .exclude('/auth/create', '/auth/login', '/api/category/(.*)')
+      .exclude(
+        '/auth/create',
+        '/auth/login',
+        '/api/category/global',  // Only global categories endpoint is public
+        '/api/profile/(.*)'      // Public profiles
+      )
       .forRoutes('*');
   }
 }
