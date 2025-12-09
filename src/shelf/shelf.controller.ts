@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, Request, UseGuards, Query } from '@nestjs/common';
 import { ShelfService } from './shelf.service';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags, ApiQuery } from '@nestjs/swagger';
 import { AuthGuard } from '../auth/auth.guard';
 
 @ApiTags('/api/shelf/') // Tags for the controller
@@ -18,10 +18,18 @@ export class ShelfController {
   }
 
   @Get('lists')
-  @ApiResponse({ status: 200, description: 'Get listing of all shelves' }) // Response description
-  index(@Request() req) {
+  @ApiQuery({ name: 'page', required: false, type: Number, description: 'Page number (default: 1)' })
+  @ApiQuery({ name: 'limit', required: false, type: Number, description: 'Items per page (default: 10)' })
+  @ApiResponse({ status: 200, description: 'Get paginated listing of all shelves' })
+  index(
+    @Request() req,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string
+  ) {
     const user = req.user;
-    return this.shelfService.index(user);
+    const pageNum = page ? parseInt(page, 10) : 1;
+    const limitNum = limit ? parseInt(limit, 10) : 10;
+    return this.shelfService.index(user, pageNum, limitNum);
   }
 
   @Get(':id')

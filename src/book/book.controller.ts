@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards, Query } from '@nestjs/common';
 import { BookService } from './book.service';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiParam, ApiBody, ApiQuery } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
 
 @ApiTags('Books')
@@ -30,10 +30,18 @@ export class BookController {
 
   @Get('lists')
   @ApiOperation({ summary: 'Get all books for current user' })
-  @ApiResponse({ status: 200, description: 'Returns list of books' })
-  index(@Request() req) {
-    const user = req.user
-    return this.bookService.index(user);
+  @ApiQuery({ name: 'page', required: false, type: Number, description: 'Page number (default: 1)' })
+  @ApiQuery({ name: 'limit', required: false, type: Number, description: 'Items per page (default: 10)' })
+  @ApiResponse({ status: 200, description: 'Returns paginated list of books' })
+  index(
+    @Request() req,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string
+  ) {
+    const user = req.user;
+    const pageNum = page ? parseInt(page, 10) : 1;
+    const limitNum = limit ? parseInt(limit, 10) : 10;
+    return this.bookService.index(user, pageNum, limitNum);
   }
 
   @Get(':id')
