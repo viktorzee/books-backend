@@ -57,11 +57,11 @@ import { ProfileModule } from './profile/profile.module';
   controllers: [AppController],
   providers: [AppService, JwtService, SupabaseService],
 })
-export class AppModule{
-  //  configure(consumer: MiddlewareConsumer){
-  //   consumer.apply(AuthMiddleware)
-  //   .exclude('/api/user/login', '/api/user/register')
-  //   .forRoutes('*');
-  // }
-
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthMiddleware)
+      .exclude('/auth/create', '/auth/login', '/api/category/(.*)')
+      .forRoutes('*');
+  }
 }
