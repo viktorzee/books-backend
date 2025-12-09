@@ -15,6 +15,7 @@ export enum ActivityType {
   UPDATE_SHELF = 'Update Shelf',
   DELETE_SHELF = 'Delete Shelf',
   ADD_BOOK_TO_SHELF = 'Add Book to Shelf',
+  WRITE_REVIEW = 'Write Review',
 }
 
 @Entity()
