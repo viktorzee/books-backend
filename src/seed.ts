@@ -38,9 +38,11 @@ async function seed() {
     if (newCategories.length === 0) {
       console.log('All categories already exist. Nothing to seed.');
     } else {
-      // Insert new categories
+      // Insert new categories as global categories
       const categoriesToInsert = newCategories.map((name) => ({
         name,
+        isGlobal: true,
+        user: null,
       }));
 
       await categoryRepository.save(categoriesToInsert);

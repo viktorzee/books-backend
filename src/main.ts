@@ -49,9 +49,8 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, document);
 
   const categorySeeder = app.get(CategoryService);
-  await categorySeeder.create(categoryResource);
+  await categorySeeder.createGlobal(categoryResource);
 
- 
   await app.listen(port);
 }
 bootstrap();
