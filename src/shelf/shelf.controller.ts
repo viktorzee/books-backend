@@ -14,8 +14,7 @@ export class ShelfController {
   @Post('create')
   @ApiResponse({ status: 200, description: 'Store a newly created shelf in storage' }) // Response description
   create(@Body() data, @Request() req) {
-    const userId = req.user;   
-    return this.shelfService.create({...data, user: userId});
+    return this.shelfService.create({...data, user: { id: req.user.id }});
   }
 
   @Get('lists')

@@ -16,17 +16,21 @@ export class AuthService {
     private config: ConfigService
   ){}
 
-  async createUser(data){      
+  async createUser(data){
     // Validate email
     if (!isEmail(data.email)) {
       throw new Error('Invalid email');
     }
-    
-    const { username } = data
+
+    const { username, first_name, last_name } = data;
     const { id } = await this.supabase.createUser(data);
-    const user = await this.users.save({ id: id, username });
+    const user = await this.users.save({
+      id,
+      username,
+      first_name,
+      last_name
+    });
     return user;
-  
   }
   
   async login(data){
