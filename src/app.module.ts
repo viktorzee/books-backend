@@ -16,6 +16,7 @@ import secretConfig from './config/secret.config';
 import { AuthModule } from './auth/auth.module';
 import { ReviewModule } from './review/review.module';
 import { ProfileModule } from './profile/profile.module';
+import { ActivityModule } from './activity/activity.module';
 
 @Module({
   imports: [ 
@@ -53,6 +54,7 @@ import { ProfileModule } from './profile/profile.module';
     CategoryModule,
     ReviewModule,
     ProfileModule,
+    ActivityModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService, SupabaseService],
