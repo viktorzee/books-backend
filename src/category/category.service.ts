@@ -60,23 +60,55 @@ export class CategoryService {
     return await this.categories.save(newCategory);
   }
 
-  // Get all categories visible to a user (global + user's own)
-  async findAllForUser(userId: string) {
-    return await this.categories.find({
+  // Get all categories visible to a user (global + user's own) with pagination
+  async findAllForUser(userId: string, page: number = 1, limit: number = 20) {
+    const skip = (page - 1) * limit;
+
+    const [categories, total] = await this.categories.findAndCount({
       where: [
         { isGlobal: true },
         { user: { id: userId } }
       ],
-      order: { isGlobal: 'DESC', name: 'ASC' }
+      order: { isGlobal: 'DESC', name: 'ASC' },
+      skip,
+      take: limit
     });
+
+    return {
+      data: categories,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+        hasNextPage: page < Math.ceil(total / limit),
+        hasPrevPage: page > 1
+      }
+    };
   }
 
-  // Get all global categories (public endpoint, no auth required)
-  async findAllGlobal() {
-    return await this.categories.find({
+  // Get all global categories (public endpoint, no auth required) with pagination
+  async findAllGlobal(page: number = 1, limit: number = 20) {
+    const skip = (page - 1) * limit;
+
+    const [categories, total] = await this.categories.findAndCount({
       where: { isGlobal: true },
-      order: { name: 'ASC' }
+      order: { name: 'ASC' },
+      skip,
+      take: limit
     });
+
+    return {
+      data: categories,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+        hasNextPage: page < Math.ceil(total / limit),
+        hasPrevPage: page > 1
+      }
+    };
   }
 
   async findOne(id: string) {

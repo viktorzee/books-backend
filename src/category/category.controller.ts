@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request, Query } from '@nestjs/common';
 import { CategoryService } from './category.service';
-import { ApiResponse, ApiTags, ApiBody, ApiOperation } from '@nestjs/swagger';
+import { ApiResponse, ApiTags, ApiBody, ApiOperation, ApiQuery } from '@nestjs/swagger';
 
 @ApiTags('Categories')
 @Controller('api/category')
@@ -26,21 +26,37 @@ export class CategoryController {
 
   @Get('lists')
   @ApiOperation({ summary: 'Get all categories (global + user-specific)' })
-  @ApiResponse({ status: 200, description: 'Returns list of categories' })
-  index(@Request() req) {
+  @ApiQuery({ name: 'page', required: false, type: Number, description: 'Page number (default: 1)' })
+  @ApiQuery({ name: 'limit', required: false, type: Number, description: 'Items per page (default: 20)' })
+  @ApiResponse({ status: 200, description: 'Returns paginated list of categories' })
+  index(
+    @Request() req,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string
+  ) {
+    const pageNum = page ? parseInt(page, 10) : 1;
+    const limitNum = limit ? parseInt(limit, 10) : 20;
+
     // If user is authenticated, return global + user's categories
     // Otherwise, return only global categories
     if (req.user?.id) {
-      return this.categoryService.findAllForUser(req.user.id);
+      return this.categoryService.findAllForUser(req.user.id, pageNum, limitNum);
     }
-    return this.categoryService.findAllGlobal();
+    return this.categoryService.findAllGlobal(pageNum, limitNum);
   }
 
   @Get('global')
   @ApiOperation({ summary: 'Get only global categories (no auth required)' })
-  @ApiResponse({ status: 200, description: 'Returns list of global categories' })
-  indexGlobal() {
-    return this.categoryService.findAllGlobal();
+  @ApiQuery({ name: 'page', required: false, type: Number, description: 'Page number (default: 1)' })
+  @ApiQuery({ name: 'limit', required: false, type: Number, description: 'Items per page (default: 20)' })
+  @ApiResponse({ status: 200, description: 'Returns paginated list of global categories' })
+  indexGlobal(
+    @Query('page') page?: string,
+    @Query('limit') limit?: string
+  ) {
+    const pageNum = page ? parseInt(page, 10) : 1;
+    const limitNum = limit ? parseInt(limit, 10) : 20;
+    return this.categoryService.findAllGlobal(pageNum, limitNum);
   }
 
   @Get(':id')
