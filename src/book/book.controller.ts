@@ -25,8 +25,7 @@ export class BookController {
   })
   @ApiResponse({ status: 201, description: 'Book created successfully' })
   store(@Body() data, @Request() req) {
-    const userId = req.user;
-    return this.bookService.store({...data, user: userId});
+    return this.bookService.store({...data, user: { id: req.user.id }});
   }
 
   @Get('lists')

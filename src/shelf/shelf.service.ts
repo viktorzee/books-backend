@@ -21,13 +21,12 @@ export class ShelfService {
     return newShelf;
   }
 
-  async index(user: User) {
-    // return await this.shelf.find();
+  async index(user: { id: string }) {
     return this.shelf.find({
       where: {
-        user
+        user: { id: user.id }
       },
-      relations: ['user']
+      relations: ['user', 'books']
     });
   }
 

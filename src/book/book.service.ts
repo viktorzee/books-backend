@@ -23,10 +23,10 @@ export class BookService {
     return newBook;
   }
 
-  async index(user: User) {
+  async index(user: { id: string }) {
     return this.books.find({
       where: {
-        user
+        user: { id: user.id }
       },
       relations: ['user']
     });
