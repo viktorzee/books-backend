@@ -23,13 +23,30 @@ export class BookService {
     return newBook;
   }
 
-  async index(user: { id: string }) {
-    return this.books.find({
+  async index(user: { id: string }, page: number = 1, limit: number = 10) {
+    const skip = (page - 1) * limit;
+
+    const [books, total] = await this.books.findAndCount({
       where: {
         user: { id: user.id }
       },
-      relations: ['user']
+      relations: ['user'],
+      skip,
+      take: limit,
+      order: { createdAt: 'DESC' }
     });
+
+    return {
+      data: books,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+        hasNextPage: page < Math.ceil(total / limit),
+        hasPrevPage: page > 1
+      }
+    };
   }
 
   async show(id: string) {

@@ -21,13 +21,30 @@ export class ShelfService {
     return newShelf;
   }
 
-  async index(user: { id: string }) {
-    return this.shelf.find({
+  async index(user: { id: string }, page: number = 1, limit: number = 10) {
+    const skip = (page - 1) * limit;
+
+    const [shelves, total] = await this.shelf.findAndCount({
       where: {
         user: { id: user.id }
       },
-      relations: ['user', 'books']
+      relations: ['user', 'books'],
+      skip,
+      take: limit,
+      order: { createdAt: 'DESC' }
     });
+
+    return {
+      data: shelves,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+        hasNextPage: page < Math.ceil(total / limit),
+        hasPrevPage: page > 1
+      }
+    };
   }
 
   async show(id: string) {
@@ -40,17 +57,26 @@ export class ShelfService {
 
   async addBookToShelf(data){
     const {bookId, shelfId} = data
-    //get shelf
-    const shelf = await this.shelf.findOne({where: {id: shelfId}})
+    //get shelf with books relation
+    const shelf = await this.shelf.findOne({where: {id: shelfId}, relations: ['books']})
+    if (!shelf) {
+      throw new NotFoundException('Shelf not found');
+    }
     //get book
     const book = await this.book.findOne({where: {id: bookId}})
-    
+    if (!book) {
+      throw new NotFoundException('Book not found');
+    }
+
     //check if book exist in shelf already
-    let existingBook = shelf.books.find(book => book.id === bookId)
+    let existingBook = shelf.books?.find(b => b.id === bookId)
     if(existingBook){
       throw new ConflictException(`This book "${book.title}" already exist in this shelf`);
     }
     //else push book to the bookshelf
+    if (!shelf.books) {
+      shelf.books = [];
+    }
     shelf.books.push(book)
     return await this.shelf.save(shelf)
   }
